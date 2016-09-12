@@ -16,6 +16,16 @@ class System {
 
 	private $stdbuf;
 
+    private static $customSmbclientPath;
+
+    /**
+     * Manually set the path to smbclient binary
+     * @param string $path
+     */
+    public static function setCustomSmbclientPath($path){
+        self::$customSmbclientPath = $path;
+    }
+
 	public static function getFD($num) {
 		$folders = array(
 			'/proc/self/fd',
@@ -30,6 +40,9 @@ class System {
 	}
 
 	public function getSmbclientPath() {
+        if (!empty(self::$customSmbclientPath)){
+            return self::$customSmbclientPath;
+        }
 		if (!$this->smbclient) {
 			$this->smbclient = trim(`which smbclient`);
 		}
